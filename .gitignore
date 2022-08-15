@@ -15,3 +15,5 @@ media
 .env.dev
 .idea/*
 .gitignore
+.env.staging.db
+.env.staging
