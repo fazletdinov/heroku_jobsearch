@@ -17,3 +17,7 @@ media
 .gitignore
 .env.staging.db
 .env.staging
+.env.prod.db
+.env.prod
+.env.prod.proxy-companion
+.env.staging.proxy-companion
