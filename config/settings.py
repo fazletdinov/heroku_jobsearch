@@ -17,15 +17,9 @@ import dj_database_url
 import dotenv
 import django_heroku
 
-django_heroku.settings(locals())# This is new
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))# This is new:
-dotenv_file = os.path.join(BASE_DIR, ".env")
-if os.path.isfile(dotenv_file):
-    dotenv.load_dotenv(dotenv_file)
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-options = DATABASES['default'].get('OPTIONS', {})
-options.pop('sslmode', None)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -47,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'rest_framework_simplejwt',
@@ -91,16 +86,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-#DATABASES = {
-    #"default": {
-    #    "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-    #    "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
-    #    "USER": os.environ.get("SQL_USER", "user"),
-    #    "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-    #    "HOST": os.environ.get("SQL_HOST", "localhost"),
-    #    "PORT": os.environ.get("SQL_PORT", "5432"),
-    #}
-#}
+DATABASES = {
+ 'default': {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+ }
+}
 
 
 # Password validation
@@ -133,13 +124,18 @@ USE_I18N = True
 
 USE_TZ = True
 
+DATABASES['default'].update(dj_database_url.config(conn_max_age=500, ssl_require=True))
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-#STATIC_URL = 'static/'
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = [
+    os.path.join(PROJECT_ROOT, 'static'),
+]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -197,5 +193,6 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 CORS_ALLOW_ALL_ORIGINS: True
 
+MAX_CONN_AGE = 600
 
-
+django_heroku.settings(locals())
