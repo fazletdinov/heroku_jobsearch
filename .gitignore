@@ -21,3 +21,4 @@ media
 .env.prod
 .env.prod.proxy-companion
 .env.staging.proxy-companion
+.env
