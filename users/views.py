@@ -5,6 +5,9 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from .models import MyUser
 from .serializers import UserRegistrationSerializer
+from django.http import HttpResponse
+def dashboard(request):
+    return HttpResponse("<h1>Hello World</h1>")
 
 class RegisterUserApiView(CreateAPIView):
     queryset = MyUser.objects.all()
