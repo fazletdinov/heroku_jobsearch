@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, ListCreateAPIView
 from rest_framework.permissions import AllowAny
 from .models import MyUser
 from .serializers import UserRegistrationSerializer
@@ -9,7 +9,7 @@ from django.http import HttpResponse
 def dashboard(request):
     return HttpResponse("<h1>Hello World</h1>")
 
-class RegisterUserApiView(CreateAPIView):
+class RegisterUserApiView(ListCreateAPIView):
     queryset = MyUser.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [AllowAny]
