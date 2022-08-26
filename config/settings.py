@@ -91,8 +91,16 @@ DATABASES = {
         "NAME": "job",
         "USER": "jobuser",
         "PASSWORD": "gjbcrhfbjns",
-        #"HOST": "localhost",
-        #"PORT": "5432",
+#        "HOST": "localhost",
+#        "PORT": "5432",
+    },
+    "DB": {
+       "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "d2tmbiujurbrcr",
+        "USER": "ljgsrnphxwbfsg",
+        "PASSWORD": "7546fe6db78dc036f71813646989a02f0a37d8afbe4ca1ab5cc6fa38f9125f57",
+        "HOST": "ec2-54-220-255-121.eu-west-1.compute.amazonaws.com",
+        "PORT": "5432",
     }
 }
 db_from_env = dj_database_url.config(conn_max_age=600)
@@ -153,10 +161,16 @@ DJOSER = {
 }
 
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
+
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
     ],
 }
 
@@ -200,7 +214,7 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 #CORS_ALLOWED_ORIGINS = [ "https://itcoty-ab110.web.app" ]
 
-
+# Cors
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -226,3 +240,6 @@ CORS_ALLOW_HEADERS = [
 MAX_CONN_AGE = 500
 
 django_heroku.settings(locals())
+
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
