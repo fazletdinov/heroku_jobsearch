@@ -1,12 +1,22 @@
+import jwt
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import *
 from .models2 import *
 from .serializers import *
-from django.http import HttpResponse
 from .permissions import IsAuthorOrReadOnly
+from django.http import HttpResponse
+from django.core.mail import EmailMessage
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.template.loader import render_to_string
+from django.urls import reverse
+from .utils import Util
+from config import settings
 
 def dashboard(request):
     return HttpResponse("<h1>Hello World</h1>")
@@ -22,9 +32,36 @@ class RegisterUserApiView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = UserRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        serializer.save()
+        user = MyUser.objects.get(email=serializer.data('email'))
+        token = serializer.validated_data['tokens']
+        current_site = get_current_site(request).domain
+        relativeLink = reverse('email-verify')
+
+        absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
+        email_body = 'Привет ' + user.email + 'перейдите по ссылке ниже, ' \
+                                                 'чтобы подтвердить свой адрес электронной почты' + absurl
+        data = {'email_body': email_body, 'to_email': user.email,
+                'email_subject': 'Verify your email'}
+        Util.send_email(data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class VerifyEmail(APIView):
+    def get(self, request):
+        token = request.GET.get('token')
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY)
+            user = MyUser.objects.get(id=payload['user_id'])
+            user.is_verified = True
+            user.is_active = True
+            user.save()
+            return Response({'email': 'успешно активирован'}, status=status.HTTP_200_OK)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Срок действия активации истек'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError:
+            return Response({'error': 'недопустимый токен'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserListApi(generics.ListAPIView):
     queryset = MyUser.objects.using('default').all()

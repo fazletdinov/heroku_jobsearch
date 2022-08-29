@@ -20,7 +20,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('Электронная почта', max_length=100, unique=True)
     is_active = models.BooleanField('Статус', default=True)
     is_staff = models.BooleanField('Статуст админа', default=False)
-
+    id_verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -29,3 +31,6 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    def tokens(self):
+        return ''
