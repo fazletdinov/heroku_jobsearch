@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
-    'rest_email_auth',
 ]
 
 MIDDLEWARE = [
