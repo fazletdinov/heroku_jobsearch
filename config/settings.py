@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
+    'rest_email_auth',
 ]
 
 MIDDLEWARE = [
@@ -154,6 +155,16 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = [
+    'rest_email_auth.authentication.VerifiedEmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+REST_EMAIL_AUTH = {
+    'EMAIL_VERIFICATION_URL': 'https://freedomitcoty.herokuapp.com/verify/{key}',
+    'PASSWORD_RESET_URL': 'https://freedomitcoty.herokuapp.com/reset/{key}',
+}
 
 DJOSER = {
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
