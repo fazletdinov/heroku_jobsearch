@@ -30,6 +30,7 @@ router.register('users', views.UsersViewSet, basename='users')
 urlpatterns = [
     path('dashboard/', views.dashboard),
     path('register/', views.RegisterUserApiView.as_view(), name='token_obtain_pair'),
+    path('verify-email/', views.VerifyEmail.as_view(), name='verify-email'),
     path('users-list/', views.UserListApi.as_view()),
     #path('api-auth/', include('rest_framework.urls')),
     #path('auth/', include('djoser.urls')),
@@ -37,7 +38,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('', include(router.urls)),
-    path('account/', include('rest_email_auth.urls'))
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
