@@ -4,10 +4,10 @@ from .models2 import *
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    tokens = serializers.SerializerMethodField()
+    #tokens = serializers.SerializerMethodField()
     class Meta:
         model = MyUser
-        fields = ('email', 'password', 'tokens')
+        fields = ('email', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
 #    def create(self, validated_data):
