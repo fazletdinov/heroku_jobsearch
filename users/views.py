@@ -17,15 +17,12 @@ from config import settings
 def dashboard(request):
     return HttpResponse("<h1>Hello World</h1>")
 
-class RegisterUserApiView(generics.CreateAPIView):
+class RegisterUserApiView(generics.GenericAPIView):
     queryset = MyUser.objects.using("default").all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-    def create(self, request, *args, **kwargs):
         serializer = UserRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -46,7 +43,7 @@ class RegisterUserApiView(generics.CreateAPIView):
         return Response(user_data, status=status.HTTP_201_CREATED)
 
 
-class VerifyEmail(APIView):
+class VerifyEmail(generics.GenericAPIView):
     def get(self, request):
         token = request.GET.get('token')
         try:
