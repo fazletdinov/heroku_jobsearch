@@ -15,11 +15,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def get_tokens(self, user):
         tokens = RefreshToken.for_user(user)
-        data = {
+
+        return {
             'refresh': str(tokens),
             'access': str(tokens.access_token),
         }
-        return data
 
     def create(self, validated_data):
         user = MyUser(email=self.validated_data['email'])

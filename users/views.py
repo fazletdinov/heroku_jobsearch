@@ -37,6 +37,7 @@ class RegisterUserApiView(generics.CreateAPIView):
         absurl = 'http://' + current_site + relativeLink + "?token=" + str(token)
         email_body = 'Привет ' + user.email + 'перейдите по ссылке ниже, ' \
                                                  'чтобы подтвердить свой адрес электронной почты \n' + absurl
+
         data = {'email_body': email_body, 'to_email': user.email,
                 'email_subject': 'Подтвердите свой адрес электронной почты'}
 
