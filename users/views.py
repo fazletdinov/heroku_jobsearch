@@ -29,7 +29,8 @@ class RegisterUserApiView(generics.CreateAPIView):
         serializer = UserRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        user = MyUser.objects.get(email=serializer.data['email'])
+        user_data = serializer.data
+        user = MyUser.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
         current_site = get_current_site(request).domain
         relativeLink = reverse('email-verify')
@@ -42,7 +43,7 @@ class RegisterUserApiView(generics.CreateAPIView):
                 'email_subject': 'Подтвердите свой адрес электронной почты'}
 
         Util.send_email(data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(user_data, status=status.HTTP_201_CREATED)
 
 
 class VerifyEmail(APIView):
