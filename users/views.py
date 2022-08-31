@@ -32,7 +32,7 @@ class RegisterUserApiView(generics.CreateAPIView):
         current_site = get_current_site(request).domain
         relativeLink = reverse('email-verify')
 
-        absurl = 'http://' + current_site + relativeLink + "?token=" + str(token)
+        absurl = 'https://' + current_site + relativeLink + "?token=" + str(token)
         email_body = 'Привет ' + user.email + 'перейдите по ссылке ниже, ' \
                                                  'чтобы подтвердить свой адрес электронной почты \n' + absurl
 
