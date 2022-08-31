@@ -252,7 +252,7 @@ MAX_CONN_AGE = 500
 django_heroku.settings(locals())
 
 # Email
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'bbomjur@gmail.com'
