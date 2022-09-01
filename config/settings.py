@@ -255,7 +255,7 @@ django_heroku.settings(locals())
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_HOST_USER = 'Freedomitcoty@yandex.ru'
+EMAIL_HOST_USER = 'Freedomitcoty'
 EMAIL_HOST_PASSWORD = 'ennntybladzveiir'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
