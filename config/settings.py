@@ -155,20 +155,20 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTHENTICATION_BACKENDS = [
-    'rest_email_auth.authentication.VerifiedEmailBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
+#AUTHENTICATION_BACKENDS = [
+#    'rest_email_auth.authentication.VerifiedEmailBackend',
+#    'django.contrib.auth.backends.ModelBackend',
+#]
 
-REST_EMAIL_AUTH = {
-    'EMAIL_VERIFICATION_URL': 'https://freedomitcoty.herokuapp.com/verify/{key}',
-    'PASSWORD_RESET_URL': 'https://freedomitcoty.herokuapp.com/reset/{key}',
-}
+#REST_EMAIL_AUTH = {
+#    'EMAIL_VERIFICATION_URL': 'https://freedomitcoty.herokuapp.com/verify/{key}',
+#    'PASSWORD_RESET_URL': 'https://freedomitcoty.herokuapp.com/reset/{key}',
+#}
 
-DJOSER = {
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
-}
+#DJOSER = {
+#    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+#    'SEND_ACTIVATION_EMAIL': True,
+#}
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
