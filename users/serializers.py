@@ -4,22 +4,22 @@ from .models2 import *
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    #tokens = serializers.SerializerMethodField()
+    tokens = serializers.SerializerMethodField()
     class Meta:
         model = MyUser
-        fields = ('email', 'password')
+        fields = ('email', 'password', 'tokens')
         extra_kwargs = {'password': {'write_only': True}}
 
 #    def create(self, validated_data):
 #        return MyUser.objects.create_user(**validated_data)
 
-#    def get_tokens(self, user):
-#        tokens = RefreshToken.for_user(user)
-#
-#        return {
-#            'refresh': str(tokens),
-#            'access': str(tokens.access_token),
-#        }
+    def get_tokens(self, user):
+        tokens = RefreshToken.for_user(user)
+
+        return {
+            'refresh': str(tokens),
+            'access': str(tokens.access_token),
+        }
 
     def create(self, validated_data):
         user = MyUser(email=self.validated_data['email'])
