@@ -12,7 +12,7 @@ from django.urls import reverse
 from .utils import Util
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from rest_framework.views import APIView
 
 def dashboard(request):
     return HttpResponse("<h1>Hello World</h1>")
@@ -33,7 +33,7 @@ class RegisterUserApiView(generics.CreateAPIView):
         current_site = get_current_site(request).domain
         relativeLink = reverse('email-verify')
 
-        absurl = 'https://' + current_site + relativeLink + "?token=" + str(token)
+        absurl = 'https://' + current_site + relativeLink + '?token=' + str(token)
         email_body = 'Привет ' + user.email + ' перейдите по ссылке ниже, ' \
                                                  'чтобы подтвердить свой адрес электронной почты \n' + absurl
 
@@ -44,7 +44,7 @@ class RegisterUserApiView(generics.CreateAPIView):
         return Response(user_data, status=status.HTTP_201_CREATED)
 
 
-class VerifyEmail(generics.GenericAPIView):
+class VerifyEmail(APIView):
     def get(self, request):
         token = request.GET.get('token')
         try:
