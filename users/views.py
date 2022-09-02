@@ -1,8 +1,6 @@
 import jwt
-from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import *
 from .models2 import *
@@ -13,6 +11,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from .utils import Util
 from django.conf import settings
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 def dashboard(request):
     return HttpResponse("<h1>Hello World</h1>")
@@ -33,7 +33,7 @@ class RegisterUserApiView(generics.CreateAPIView):
         current_site = get_current_site(request).domain
         relativeLink = reverse('email-verify')
 
-        absurl = 'http://' + current_site + relativeLink + "?token=" + str(token)
+        absurl = 'https://' + current_site + relativeLink + "?token=" + str(token)
         email_body = 'Привет ' + user.email + 'перейдите по ссылке ниже, ' \
                                                  'чтобы подтвердить свой адрес электронной почты \n' + absurl
 
@@ -53,11 +53,11 @@ class VerifyEmail(generics.GenericAPIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-            return Response({'email': 'успешно активирован'}, status=status.HTTP_200_OK)
+            return Response({'email': 'Успешно активирован'}, status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Срок действия активации истек'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError:
-            return Response({'error': 'недопустимый токен'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Недопустимый токен'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserListApi(generics.ListAPIView):
