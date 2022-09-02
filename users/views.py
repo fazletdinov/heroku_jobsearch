@@ -12,7 +12,7 @@ from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from .utils import Util
-from config import settings
+from django.conf import settings
 
 def dashboard(request):
     return HttpResponse("<h1>Hello World</h1>")
@@ -33,7 +33,7 @@ class RegisterUserApiView(generics.CreateAPIView):
         current_site = get_current_site(request).domain
         relativeLink = reverse('email-verify')
 
-        absurl = 'https://' + current_site + relativeLink + "?token=" + str(token)
+        absurl = 'http://' + current_site + relativeLink + "?token=" + str(token)
         email_body = 'Привет ' + user.email + 'перейдите по ссылке ниже, ' \
                                                  'чтобы подтвердить свой адрес электронной почты \n' + absurl
 
