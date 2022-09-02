@@ -49,9 +49,9 @@ class VerifyEmail(generics.GenericAPIView):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY)
             user = MyUser.objects.get(id=payload['user_id'])
-            user.is_verified = True
-            user.is_active = True
-            user.save()
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
             return Response({'email': 'успешно активирован'}, status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Срок действия активации истек'}, status=status.HTTP_400_BAD_REQUEST)
