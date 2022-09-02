@@ -25,7 +25,7 @@ class RegisterUserApiView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = UserRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(using='default')
         user_data = serializer.data
         user = MyUser.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
@@ -34,7 +34,7 @@ class RegisterUserApiView(generics.CreateAPIView):
         relativeLink = reverse('email-verify')
 
         absurl = 'https://' + current_site + relativeLink + "?token=" + str(token)
-        email_body = 'Привет ' + user.email + 'перейдите по ссылке ниже, ' \
+        email_body = 'Привет ' + user.email + ' перейдите по ссылке ниже, ' \
                                                  'чтобы подтвердить свой адрес электронной почты \n' + absurl
 
         data = {'email_body': email_body, 'to_email': user.email,
@@ -52,7 +52,7 @@ class VerifyEmail(generics.GenericAPIView):
             user = MyUser.objects.using('default').get(id=payload['user_id'])
             if not user.is_verify:
                 user.is_verify = True
-                user.save()
+                user.save(using='default')
             return Response({'email': 'Успешно активирован'}, status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Срок действия активации истек'}, status=status.HTTP_400_BAD_REQUEST)
