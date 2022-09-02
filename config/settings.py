@@ -91,8 +91,8 @@ DATABASES = {
         "NAME": "job",
         "USER": "jobuser",
         "PASSWORD": "gjbcrhfbjns",
-#        "HOST": "localhost",
-#        "PORT": "5432",
+        "HOST": "localhost",
+        "PORT": "5432",
     },
 #    "DB": {
 #       "ENGINE": "django.db.backends.postgresql_psycopg2",
