@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.conf import settings
 
 class MyUserManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -32,3 +33,18 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+class Resume(models.Model):
+
+    #author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='resumes')
+    hard_skills = models.CharField(max_length=1000)
+    soft_skills = models.CharField(max_length=1000)
+    desired_position = models.CharField(max_length=150)
+    desired_payment = models.IntegerField()
+    photo = models.ImageField(upload_to='photo/%Y/%m/%d', blank=True)
+    desired_place_of_work = models.CharField(max_length=1000)
+    about_me = models.CharField(max_length=3000)
+    checkbox = models.CharField(max_length=255)
+    direction_of_activity = models.CharField(max_length=1000)
+    type_of_company = models.CharField(max_length=1000)
+    csv = models.CharField(max_length=1000)
+    resume = models.FileField(upload_to='resume/%Y/%m/%d')

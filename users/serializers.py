@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MyUser
+from .models import MyUser, Resume
 from .models2 import *
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -112,3 +112,8 @@ class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = "__all__"
+
+class ResumeSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Resume
+        fields = '__all__'

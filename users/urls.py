@@ -28,7 +28,7 @@ router.register('qa', views.QaViewSet, basename='qa')
 router.register('users', views.UsersViewSet, basename='users')
 
 urlpatterns = [
-    path('dashboard/', views.dashboard),
+    path('create-resume/', views.ResumeApi.as_view(), name='create-resume'),
     path('register/', views.RegisterUserApiView.as_view(), name='token_obtain_pair'),
     path('email-verify/', views.VerifyEmail.as_view(), name='email-verify'),
     path('users-list/', views.UserListApi.as_view()),

@@ -60,6 +60,11 @@ class VerifyEmail(APIView):
         except jwt.exceptions.DecodeError:
             return Response({'error': 'Недопустимый токен'}, status=status.HTTP_400_BAD_REQUEST)
 
+class ResumeApi(generics.ListCreateAPIView):
+    queryset = Resume.objects.using('default').all()
+    serializer_class = ResumeSerializers
+    permission_classes = [IsAuthorOrReadOnly]
+
 
 class UserListApi(generics.ListAPIView):
     queryset = MyUser.objects.using('default').all()
