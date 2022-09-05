@@ -63,7 +63,7 @@ class VerifyEmail(APIView):
 class ResumeViewSetApi(viewsets.ModelViewSet):
     queryset = Resume.objects.using('default').all()
     serializer_class = ResumeSerializers
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    #permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
