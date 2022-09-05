@@ -1,7 +1,7 @@
 import jwt
 from rest_framework.response import Response
 from rest_framework import generics, viewsets, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from .models import *
 from .models2 import *
 from .serializers import *
@@ -60,16 +60,18 @@ class VerifyEmail(APIView):
         except jwt.exceptions.DecodeError:
             return Response({'error': 'Недопустимый токен'}, status=status.HTTP_400_BAD_REQUEST)
 
-class ResumeApi(generics.ListCreateAPIView):
+class ResumeViewSetApi(viewsets.ModelViewSet):
     queryset = Resume.objects.using('default').all()
     serializer_class = ResumeSerializers
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
-class UserListApi(generics.ListAPIView):
+class UserListApi(viewsets.ReadOnlyModelViewSet):
     queryset = MyUser.objects.using('default').all()
     serializer_class = UserListSerializer
-    permission_classes = [IsAuthenticated]
 
 # Вакансии
 

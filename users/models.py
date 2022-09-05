@@ -34,8 +34,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 class Resume(models.Model):
-
-    #author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='resumes')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='resumes')
     hard_skills = models.CharField(max_length=1000)
     soft_skills = models.CharField(max_length=1000)
     desired_position = models.CharField(max_length=150)

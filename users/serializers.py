@@ -28,11 +28,20 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user.save(using='default')
         return user
 
-class UserListSerializer(serializers.ModelSerializer):
+class UserListSerializer(serializers.HyperlinkedModelSerializer):
+    resumes = serializers.HyperlinkedRelatedField(many=True, queryset=Resume.objects.all(),
+                                                  view_name='resume-detail')
     class Meta:
         model = MyUser
-        fields = '__all__'
+        fields = ('url', 'id', 'email', 'resumes')
 
+class ResumeSerializers(serializers.HyperlinkedModelSerializer):
+    owner = serializers.CharField(read_only=True, source='owner.email')
+    class Meta:
+        model = Resume
+        fields = ('url', 'id', 'hard_skills', 'soft_skills', 'desired_position', 'desired_payment',
+                  'photo', 'desired_place_of_work', 'about_me', 'checkbox', 'direction_of_activity',
+                  'type_of_company', 'csv', 'resume', 'owner')
 class AdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
@@ -113,7 +122,3 @@ class UsersSerializer(serializers.ModelSerializer):
         model = Users
         fields = "__all__"
 
-class ResumeSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = Resume
-        fields = '__all__'

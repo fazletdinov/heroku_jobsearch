@@ -26,15 +26,13 @@ router.register('pm', views.PmViewSet, basename='pm')
 router.register('product', views.ProductViewSet, basename='product')
 router.register('qa', views.QaViewSet, basename='qa')
 router.register('users', views.UsersViewSet, basename='users')
+router.register('user-list', views.UserListApi, basename='user-list')
+router.register('resume', views.ResumeViewSetApi, basename='resume')
+
 
 urlpatterns = [
-    path('create-resume/', views.ResumeApi.as_view(), name='create-resume'),
     path('register/', views.RegisterUserApiView.as_view(), name='token_obtain_pair'),
     path('email-verify/', views.VerifyEmail.as_view(), name='email-verify'),
-    path('users-list/', views.UserListApi.as_view()),
-    #path('api-auth/', include('rest_framework.urls')),
-    #path('auth/', include('djoser.urls')),
-    #path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('', include(router.urls)),
