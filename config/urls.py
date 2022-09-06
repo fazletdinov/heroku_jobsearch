@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -25,7 +25,7 @@ schema_view = get_schema_view(
       default_version='v1',
       description="A simple API for the Job Search web application",
       terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="Freedomitcoty@yandex.ru"),
+      contact=openapi.Contact(email="contact@expenses.local"),
       license=openapi.License(name="BSD License"),
    ),
    public=True,
