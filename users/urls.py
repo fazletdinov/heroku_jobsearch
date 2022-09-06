@@ -1,13 +1,9 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 from . import views
 from django.conf.urls.static import static
 from django.conf import settings
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
+from rest_framework_simplejwt.views import (TokenRefreshView, TokenVerifyView)
 
 router = DefaultRouter()
 router.register('ad', views.AdViewSet, basename='ad')
@@ -28,6 +24,7 @@ router.register('qa', views.QaViewSet, basename='qa')
 router.register('users', views.UsersViewSet, basename='users')
 router.register('user-list', views.UserListApi, basename='user-list')
 router.register('resume', views.ResumeViewSetApi, basename='resume')
+
 
 
 urlpatterns = [
