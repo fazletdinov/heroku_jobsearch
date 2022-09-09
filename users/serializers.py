@@ -31,9 +31,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UserListSerializer(serializers.HyperlinkedModelSerializer):
     resumes = serializers.HyperlinkedRelatedField(many=True, queryset=Resume.objects.all(),
                                                   view_name='resume-detail')
+    vacansyes = serializers.HyperlinkedRelatedField(many=True, queryset=Vacancy.objects.all(),
+                                                    view_name='vacansy-detail')
     class Meta:
         model = MyUser
-        fields = ('url', 'id', 'email', 'resumes')
+        fields = ('url', 'id', 'email', 'resumes', 'vacansyes')
 
 class ResumeSerializers(serializers.HyperlinkedModelSerializer):
     owner = serializers.CharField(read_only=True, source='owner.email')
