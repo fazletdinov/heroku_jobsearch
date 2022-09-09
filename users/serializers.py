@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MyUser, Resume
+from .models import MyUser, Resume, Vacancy
 from .models2 import *
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -42,6 +42,15 @@ class ResumeSerializers(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'hard_skills', 'soft_skills', 'desired_position', 'desired_payment',
                   'photo', 'desired_place_of_work', 'about_me', 'checkbox', 'direction_of_activity',
                   'type_of_company', 'csv', 'resume', 'owner')
+
+class VacansySerializer(serializers.ModelSerializer):
+    owner = serializers.CharField(read_only=True, source='owner.email')
+    class Meta:
+        model = Vacancy
+        fields = '__all__'
+
+
+
 class AdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad

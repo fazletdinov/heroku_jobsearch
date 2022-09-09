@@ -24,6 +24,7 @@ router.register('qa', views.QaViewSet, basename='qa')
 router.register('users', views.UsersViewSet, basename='users')
 router.register('user-list', views.UserListApi, basename='user-list')
 router.register('resume', views.ResumeViewSetApi, basename='resume')
+router.register('vacansy/', views.VacansyViewSetApi, basename='vacansy')
 
 
 

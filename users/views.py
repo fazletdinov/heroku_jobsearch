@@ -59,7 +59,7 @@ class VerifyEmail(APIView):
             return Response({'error': 'Срок действия активации истек'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError:
             return Response({'error': 'Недопустимый токен'}, status=status.HTTP_400_BAD_REQUEST)
-
+# Резюме
 class ResumeViewSetApi(viewsets.ModelViewSet):
     queryset = Resume.objects.using('default').all()
     serializer_class = ResumeSerializers
@@ -68,12 +68,19 @@ class ResumeViewSetApi(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+# Вакансии для создания
+class VacansyViewSetApi(viewsets.ModelViewSet):
+    queryset = Vacancy.objects.using('default').all()
+    serializer_class = VacansySerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class UserListApi(viewsets.ReadOnlyModelViewSet):
     queryset = MyUser.objects.using('default').all()
     serializer_class = UserListSerializer
 
-# Вакансии
+# Вакансии из базы
 
 class AdListView(generics.ListCreateAPIView):
     queryset = Ad.objects.using('DB').all()
