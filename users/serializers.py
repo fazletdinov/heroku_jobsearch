@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MyUser, Resume, Vacancy
+from .models import MyUser, Resume, Vacancy, Profile
 from .models2 import *
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -51,6 +51,10 @@ class VacansySerializer(serializers.ModelSerializer):
         model = Vacancy
         fields = '__all__'
 
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = '__all__'
 
 
 class AdSerializer(serializers.ModelSerializer):

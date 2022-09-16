@@ -13,6 +13,7 @@ from .utils import Util
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 
 def dashboard(request):
     return HttpResponse("<h1>Hello World</h1>")
@@ -72,6 +73,7 @@ class ResumeViewSetApi(viewsets.ModelViewSet):
 class VacansyViewSetApi(viewsets.ModelViewSet):
     queryset = Vacancy.objects.using('default').all()
     serializer_class = VacansySerializer
+    # permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -79,6 +81,17 @@ class VacansyViewSetApi(viewsets.ModelViewSet):
 class UserListApi(viewsets.ReadOnlyModelViewSet):
     queryset = MyUser.objects.using('default').all()
     serializer_class = UserListSerializer
+
+class ProfileView(viewsets.ModelViewSet):
+    queryset = Profile.objects.using('default').all()
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthorOrReadOnly]
+
+
+@api_view(['GET'])
+def searchapi(request):
+    pass
+
 
 # Вакансии из базы
 
