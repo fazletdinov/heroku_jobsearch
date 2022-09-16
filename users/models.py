@@ -96,8 +96,9 @@ class Vacancy(models.Model):
     automatic_notification = models.BooleanField(default=False)
     additionally = models.BooleanField(default=False)
 
-class Profile(MyUser):
+class Profile(models.Model):
     # Личные данные
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     family = models.CharField(max_length=100)
     patronymic = models.CharField(max_length=100)

@@ -43,18 +43,30 @@ class ResumeSerializers(serializers.HyperlinkedModelSerializer):
         model = Resume
         fields = ('url', 'id', 'hard_skills', 'soft_skills', 'desired_position', 'desired_payment',
                   'photo', 'desired_place_of_work', 'about_me', 'checkbox', 'direction_of_activity',
-                  'type_of_company', 'csv', 'resume', 'owner')
+                  'type_of_company', 'cv', 'resume', 'owner')
 
-class VacansySerializer(serializers.ModelSerializer):
+class VacansySerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.CharField(read_only=True, source='owner.email')
     class Meta:
         model = Vacancy
-        fields = '__all__'
+        fields = ('url', 'id', 'company', 'looking_for_a_specialist', 'spialization', 'programming_language',
+                  'type_of_activity', 'framework', 'soft_and_services', 'specialist_level', 'payment_amount',
+                  'paymant', 'job_description', 'required_work_experience', 'type_of_work',
+                  'location', 'location_bool', 'type_of_employment', 'working_draft', 'duration_of_work',
+                  'hard_skills', 'soft_skills', 'language', 'language_picmen', 'language_yctno', 'quation1',
+                  'quation2', 'quation3', 'health', 'food', 'working_conditions', 'education', 'finance_and_guarantees',
+                  'entertainments', 'transport', 'job_manager', 'email', 'telephon', 'responses', 'receive_notifications',
+                  'archive_it', 'when_to_publish', 'automatic_notification', 'additionally', 'owner')
 
-class ProfileSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.CharField(read_only=True, source='owner.email')
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = ('url', 'id', 'name', 'family', 'patronymic', 'date_of_birth', 'pol',
+                  'country', 'city', 'emails', 'mobile', 'about_me', 'social', 'cv',
+                  'portfolio', 'educational_institution', 'educational_institution_date',
+                  'specialization', 'specialization_text', 'language', 'language_lvl_picmenno',
+                  'language_lvl_yctno', 'hard_skills', 'soft_skills', 'owner')
 
 
 class AdSerializer(serializers.ModelSerializer):
