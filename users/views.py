@@ -83,12 +83,12 @@ class UserListApi(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserListSerializer
 
 class ProfileView(viewsets.ModelViewSet):
-    queryset = Profile.objects.using('default').all()
+    queryset = UserProfile.objects.using('default').all()
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthorOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(user=self.request.user)
 
 @api_view(['GET'])
 def searchapi(request):

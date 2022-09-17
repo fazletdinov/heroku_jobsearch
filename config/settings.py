@@ -95,14 +95,14 @@ DATABASES = {
         "HOST": "localhost",
         "PORT": "5432",
     },
-    "DB": {
-       "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "d2tmbiujurbrcr",
-        "USER": "ljgsrnphxwbfsg",
-        "PASSWORD": "7546fe6db78dc036f71813646989a02f0a37d8afbe4ca1ab5cc6fa38f9125f57",
-        "HOST": "ec2-54-220-255-121.eu-west-1.compute.amazonaws.com",
-        "PORT": "5432",
-    }
+#    "DB": {
+#       "ENGINE": "django.db.backends.postgresql_psycopg2",
+#        "NAME": "d2tmbiujurbrcr",
+#        "USER": "ljgsrnphxwbfsg",
+#        "PASSWORD": "7546fe6db78dc036f71813646989a02f0a37d8afbe4ca1ab5cc6fa38f9125f57",
+#        "HOST": "ec2-54-220-255-121.eu-west-1.compute.amazonaws.com",
+#        "PORT": "5432",
+#    }
 }
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
@@ -257,7 +257,7 @@ django_heroku.settings(locals())
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_HOST_USER = 'Freedomitcoty@yandex.ru'
-EMAIL_HOST_PASSWORD = 'ennntybladzveiir'
+EMAIL_HOST_PASSWORD = 'arnkbxfgpfqzyoml'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 

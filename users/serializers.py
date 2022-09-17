@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MyUser, Resume, Vacancy, Profile
+from .models import MyUser, Resume, Vacancy, UserProfile
 from .models2 import *
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -33,9 +33,10 @@ class UserListSerializer(serializers.HyperlinkedModelSerializer):
                                                   view_name='resume-detail')
     vacansyes = serializers.HyperlinkedRelatedField(many=True, queryset=Vacancy.objects.all(),
                                                     view_name='vacansy-detail')
+    profile = serializers.HyperlinkedRelatedField(view_name='profile-detail', queryset=UserProfile.objects.all())
     class Meta:
         model = MyUser
-        fields = ('url', 'id', 'email', 'resumes', 'vacansyes')
+        fields = ('url', 'id', 'email', 'resumes', 'vacansyes', 'profile')
 
 class ResumeSerializers(serializers.HyperlinkedModelSerializer):
     owner = serializers.CharField(read_only=True, source='owner.email')
@@ -59,14 +60,14 @@ class VacansySerializer(serializers.HyperlinkedModelSerializer):
                   'archive_it', 'when_to_publish', 'automatic_notification', 'additionally', 'owner')
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.CharField(read_only=True, source='owner.email')
+    user = serializers.CharField(read_only=True)
     class Meta:
-        model = Profile
+        model = UserProfile
         fields = ('url', 'id', 'name', 'family', 'patronymic', 'date_of_birth', 'pol',
                   'country', 'city', 'emails', 'mobile', 'about_me', 'social', 'cv',
                   'portfolio', 'educational_institution', 'educational_institution_date',
                   'specialization', 'specialization_text', 'language', 'language_lvl_picmenno',
-                  'language_lvl_yctno', 'hard_skills', 'soft_skills', 'owner')
+                  'language_lvl_yctno', 'hard_skills', 'soft_skills', 'user')
 
 
 class AdSerializer(serializers.ModelSerializer):
