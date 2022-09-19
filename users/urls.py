@@ -33,7 +33,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('', include(router.urls)),
-    path('profile', views.UserApi.as_view(), name='profile'),
+    path('profile/', views.UserApi.as_view(), name='profile'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
