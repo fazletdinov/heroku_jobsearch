@@ -62,7 +62,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
                   'country', 'city', 'emails', 'mobile', 'about_me', 'social', 'cv',
                   'portfolio', 'educational_institution', 'educational_institution_date',
                   'specialization', 'specialization_text', 'language', 'language_lvl_picmenno',
-                  'language_lvl_yctno', 'hard_skills', 'soft_skills')
+                  'language_lvl_yctno', 'hard_skills', 'soft_skills', 'user')
 
     def create(self, validated_data):
         profile = UserProfile.objects.create(user=self.context['request'].user, **validated_data)
