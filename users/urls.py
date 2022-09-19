@@ -24,7 +24,6 @@ router.register('qa', views.QaViewSet, basename='qa')
 router.register('users', views.UsersViewSet, basename='users')
 router.register('resume', views.ResumeViewSetApi, basename='resume')
 router.register('vacansy', views.VacansyViewSetApi, basename='vacansy')
-router.register('profile', views.ProfileView, basename='profile')
 
 
 
@@ -34,7 +33,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('', include(router.urls)),
-    path('user-list', views.UserApi.as_view(), name='user-list'),
+    path('profile', views.UserApi.as_view(), name='profile'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

@@ -33,7 +33,29 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 #    class Meta:
 #        model = UserProfile
 #        fields = "__all__"
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    resumes = serializers.HyperlinkedRelatedField(many=True, queryset=Resume.objects.all(),
+                                                  view_name='resume-detail')
+    vacansyes = serializers.HyperlinkedRelatedField(many=True, queryset=Vacancy.objects.all(),
+                                                    view_name='vacansy-detail')
+
+    class Meta:
+        model = MyUser
+        fields = ('url', 'id', 'email', 'resumes', 'vacansyes')
+
+#    def update(self, instance, validated_data):
+#        userprofile_serializer = self.fields['profile']
+#        userprofile_instance = instance.userprofile
+#        userprofile_data = validated_data.pop('userprofile', {})
+#
+#        userprofile_serializer.update(userprofile_instance, userprofile_data)
+#        instance = super().update(instance, validated_data)
+#        return instance
+
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    user = UserSerializer(read_only=True)
     class Meta:
         model = UserProfile
         fields = ('url', 'id', 'name', 'family', 'patronymic', 'date_of_birth', 'pol',
@@ -42,25 +64,9 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
                   'specialization', 'specialization_text', 'language', 'language_lvl_picmenno',
                   'language_lvl_yctno', 'hard_skills', 'soft_skills')
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    resumes = serializers.HyperlinkedRelatedField(many=True, queryset=Resume.objects.all(),
-                                                  view_name='resume-detail')
-    vacansyes = serializers.HyperlinkedRelatedField(many=True, queryset=Vacancy.objects.all(),
-                                                    view_name='vacansy-detail')
-    profile = ProfileSerializer(source='profile', many=False)
-    class Meta:
-        model = MyUser
-        fields = ('url', 'id', 'email', 'resumes', 'vacansyes', 'profile')
-
-    def update(self, instance, validated_data):
-        userprofile_serializer = self.fields['profile']
-        userprofile_instance = instance.userprofile
-        userprofile_data = validated_data.pop('userprofile', {})
-
-        userprofile_serializer.update(userprofile_instance, userprofile_data)
-        instance = super().update(instance, validated_data)
-        return instance
-
+    def create(self, validated_data):
+        profile = UserProfile.objects.create(user=self.context['request'].user, **validated_data)
+        return profile
 
 class ResumeSerializers(serializers.HyperlinkedModelSerializer):
     owner = serializers.CharField(read_only=True, source='owner.email')
