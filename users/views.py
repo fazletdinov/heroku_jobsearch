@@ -78,9 +78,13 @@ class VacansyViewSetApi(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-class UserListApi(viewsets.ReadOnlyModelViewSet):
+class UserApi(generics.RetrieveUpdateAPIView):
     queryset = MyUser.objects.using('default').all()
-    serializer_class = UserListSerializer
+    serializer_class = UserSerializer
+    permission_classes = ()
+
+    def get_object(self):
+        return self.request.user
 
 class ProfileView(viewsets.ModelViewSet):
     queryset = UserProfile.objects.using('default').all()

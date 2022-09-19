@@ -28,15 +28,39 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user.save(using='default')
         return user
 
-class UserListSerializer(serializers.HyperlinkedModelSerializer):
+
+#class ProfileSerializer(serializers.ModelSerializer):
+#    class Meta:
+#        model = UserProfile
+#        fields = "__all__"
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('url', 'id', 'name', 'family', 'patronymic', 'date_of_birth', 'pol',
+                  'country', 'city', 'emails', 'mobile', 'about_me', 'social', 'cv',
+                  'portfolio', 'educational_institution', 'educational_institution_date',
+                  'specialization', 'specialization_text', 'language', 'language_lvl_picmenno',
+                  'language_lvl_yctno', 'hard_skills', 'soft_skills')
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     resumes = serializers.HyperlinkedRelatedField(many=True, queryset=Resume.objects.all(),
                                                   view_name='resume-detail')
     vacansyes = serializers.HyperlinkedRelatedField(many=True, queryset=Vacancy.objects.all(),
                                                     view_name='vacansy-detail')
-    profile = serializers.HyperlinkedRelatedField(view_name='profile-detail', queryset=UserProfile.objects.all())
+    profile = ProfileSerializer(source='profile', many=False)
     class Meta:
         model = MyUser
         fields = ('url', 'id', 'email', 'resumes', 'vacansyes', 'profile')
+
+    def update(self, instance, validated_data):
+        userprofile_serializer = self.fields['profile']
+        userprofile_instance = instance.userprofile
+        userprofile_data = validated_data.pop('userprofile', {})
+
+        userprofile_serializer.update(userprofile_instance, userprofile_data)
+        instance = super().update(instance, validated_data)
+        return instance
+
 
 class ResumeSerializers(serializers.HyperlinkedModelSerializer):
     owner = serializers.CharField(read_only=True, source='owner.email')
@@ -59,15 +83,7 @@ class VacansySerializer(serializers.HyperlinkedModelSerializer):
                   'entertainments', 'transport', 'job_manager', 'email', 'telephon', 'responses', 'receive_notifications',
                   'archive_it', 'when_to_publish', 'automatic_notification', 'additionally', 'owner')
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.CharField(read_only=True)
-    class Meta:
-        model = UserProfile
-        fields = ('url', 'id', 'name', 'family', 'patronymic', 'date_of_birth', 'pol',
-                  'country', 'city', 'emails', 'mobile', 'about_me', 'social', 'cv',
-                  'portfolio', 'educational_institution', 'educational_institution_date',
-                  'specialization', 'specialization_text', 'language', 'language_lvl_picmenno',
-                  'language_lvl_yctno', 'hard_skills', 'soft_skills', 'user')
+
 
 
 class AdSerializer(serializers.ModelSerializer):
