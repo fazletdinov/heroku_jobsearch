@@ -90,7 +90,7 @@ class UserApi(generics.GenericAPIView):
 class ProfileView(generics.GenericAPIView):
     #queryset = UserProfile.objects.using('default').all()
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    #permission_classes = [IsAuthenticatedOrReadOnly]
 
     def post(self, request, *args, **kwargs):
         user = get_object_or_404(MyUser, pk=request.user.pk)
