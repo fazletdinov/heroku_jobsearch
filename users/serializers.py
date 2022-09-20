@@ -35,6 +35,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 #        fields = "__all__"
 
 
+
 class UserSerializer(serializers.ModelSerializer):
     resumes = serializers.HyperlinkedRelatedField(many=True, queryset=Resume.objects.all(),
                                                   view_name='resume-detail')
@@ -43,16 +44,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MyUser
-        fields = ('id', 'email', 'resumes', 'vacansyes')
+        fields = ('id', 'email', 'vacansyes', 'resumes')
 
-#    def update(self, instance, validated_data):
-#        userprofile_serializer = self.fields['profile']
-#        userprofile_instance = instance.userprofile
-#        userprofile_data = validated_data.pop('userprofile', {})
-#
-#        userprofile_serializer.update(userprofile_instance, userprofile_data)
-#        instance = super().update(instance, validated_data)
-#        return instance
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)

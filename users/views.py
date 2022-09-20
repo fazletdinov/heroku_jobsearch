@@ -1,4 +1,5 @@
 import jwt
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import generics, viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -92,10 +93,12 @@ class ProfileView(generics.GenericAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def post(self, request, *args, **kwargs):
+        user = get_object_or_404(MyUser, pk=request.user.pk)
         serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        profile = serializer.save(user=request.user)
-        return Response(ProfileSerializer(profile))
+        if serializer.is_valid(raise_exception=True):
+            user.profile = serializer.save()
+            return Response(ProfileSerializer(user.profile))
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
