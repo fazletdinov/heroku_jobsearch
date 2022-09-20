@@ -55,7 +55,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 #        return instance
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = UserProfile
         fields = ('url', 'id', 'name', 'family', 'patronymic', 'date_of_birth', 'pol',
