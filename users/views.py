@@ -87,7 +87,7 @@ class UserApi(generics.GenericAPIView):
     def get_object(self):
         return self.request.user
 
-class ProfileView(generics.ListCreateAPIView):
+class ProfileView(viewsets.ModelViewSet):
     #queryset = UserProfile.objects.using('default').all()
     serializer_class = UserSerializer
     #permission_classes = [IsAuthenticatedOrReadOnly]
@@ -98,7 +98,7 @@ class ProfileView(generics.ListCreateAPIView):
             profile = serializer.save(user=request.user)
             return Response(ProfileSerializer(profile))
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    def get_queryset(self, request, *args, **kwargs):
+    def get_queryset(self):
         user = self.request.user
         return UserProfile.objects.filter(user=user)
 
