@@ -98,12 +98,12 @@ class ProfileView(mixins.CreateModelMixin,
     serializer_class = UserSerializer
     #permission_classes = [IsAuthenticatedOrReadOnly]
 
-#    def post(self, request, *args, **kwargs):
-#        serializer = self.serializer_class(data=request.data)
-#        if serializer.is_valid(raise_exception=True):
-#            profile = serializer.save(user=request.user)
-#            return Response(ProfileSerializer(profile))
-#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            profile = serializer.save(user=request.user)
+            return Response(ProfileSerializer(profile))
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
         return self.request.user.profile
