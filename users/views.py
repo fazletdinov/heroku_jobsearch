@@ -87,7 +87,7 @@ class UserApi(generics.GenericAPIView):
     def get_object(self):
         return self.request.user
 
-class ProfileView(viewsets.ModelViewSet):
+class ProfileView(generics.ListCreateAPIView):
     #queryset = UserProfile.objects.using('default').all()
     serializer_class = UserSerializer
     #permission_classes = [IsAuthenticatedOrReadOnly]
