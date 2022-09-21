@@ -29,38 +29,77 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 
-#class ProfileSerializer(serializers.ModelSerializer):
-#    class Meta:
-#        model = UserProfile
-#        fields = "__all__"
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = "__all__"
 
 
 
 class UserSerializer(serializers.ModelSerializer):
-    resumes = serializers.HyperlinkedRelatedField(many=True, queryset=Resume.objects.all(),
-                                                  view_name='resume-detail')
-    vacansyes = serializers.HyperlinkedRelatedField(many=True, queryset=Vacancy.objects.all(),
-                                                    view_name='vacansy-detail')
-
+    #resumes = serializers.HyperlinkedRelatedField(many=True, queryset=Resume.objects.all(),
+                                                  #view_name='resume-detail')
+    #vacansyes = serializers.HyperlinkedRelatedField(many=True, queryset=Vacancy.objects.all(),
+                                                    #view_name='vacansy-detail')
+    profile = ProfileSerializer()
     class Meta:
         model = MyUser
-        fields = ('id', 'email', 'vacansyes', 'resumes')
-
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField(read_only=True)
-    class Meta:
-        model = UserProfile
-        fields = ('id', 'name', 'family', 'patronymic', 'date_of_birth', 'pol',
-                  'country', 'city', 'emails', 'mobile', 'about_me', 'social', 'cv',
-                  'portfolio', 'educational_institution', 'educational_institution_date',
-                  'specialization', 'specialization_text', 'language', 'language_lvl_picmenno',
-                  'language_lvl_yctno', 'hard_skills', 'soft_skills', 'user')
+        fields = ('id', 'email', 'profile')
 
     def create(self, validated_data):
-        profile = UserProfile.objects.create(user=self.context['request'].user, **validated_data)
-        return profile
+        profile_data = validated_data.pop('profile')
+        user = MyUser.objects.create(**validated_data)
+        UserProfile.objects.create(user=user, **profile_data)
+        return user
+
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('profile')
+        profile = instance.profile
+        instance.email = validated_data.get('email', instance.email)
+        instance.save()
+
+        profile.name = profile_data.get('name', profile.name)
+        profile.family = profile_data.get('family', profile.family)
+        profile.patronymic = profile_data.get('patronymic', profile.patronymic)
+        profile.date_of_birth = profile_data.get('date_of_birth', profile.date_of_birth)
+        profile.pol = profile_data.get('pol', profile.pol)
+        profile.country = profile_data.get('country', profile.country)
+        profile.city = profile_data.get('city', profile.city)
+        profile.emails = profile_data.get('emails', profile.emails)
+        profile.mobile = profile_data.get('mobile', profile.mobile)
+        profile.about_me = profile_data.get('about_me', profile.about_me)
+        profile.social = profile_data.get('social', profile.social)
+        profile.cv = profile_data.get('cv', profile.cv)
+        profile.portfolio = profile_data.get('portfolio', profile.portfolio)
+        profile.educational_institution = profile_data.get('educational_institution', profile.educational_institution)
+        profile.educational_institution_date = profile_data.get('educational_institution_date', profile.educational_institution_date)
+        profile.specialization = profile_data.get('specialization', profile.specialization)
+        profile.specialization_text = profile_data.get('specialization_text', profile.specialization_text)
+        profile.language = profile_data.get('language', profile.language)
+        profile.language_lvl_picmenno = profile_data.get('language_lvl_picmenno', profile.language_lvl_picmenno)
+        profile.language_lvl_yctno = profile_data.get('language_lvl_yctno', profile.language_lvl_yctno)
+        profile.hard_skills = profile_data.get('hard_skills', profile.hard_skills)
+        profile.soft_skills = profile_data.get('soft_skills', profile.soft_skills)
+        profile.save()
+
+        return instance
+
+
+
+
+#class ProfileSerializer(serializers.ModelSerializer):
+#    user = serializers.StringRelatedField(read_only=True)
+#    class Meta:
+#        model = UserProfile
+#        fields = ('id', 'name', 'family', 'patronymic', 'date_of_birth', 'pol',
+#                  'country', 'city', 'emails', 'mobile', 'about_me', 'social', 'cv',
+#                  'portfolio', 'educational_institution', 'educational_institution_date',
+#                  'specialization', 'specialization_text', 'language', 'language_lvl_picmenno',
+#                  'language_lvl_yctno', 'hard_skills', 'soft_skills', 'user')
+
+#    def create(self, validated_data):
+#        profile = UserProfile.objects.create(user=self.context['request'].user, **validated_data)
+#        return profile
 
 class ResumeSerializers(serializers.ModelSerializer):
     owner = serializers.CharField(read_only=True, source='owner.email')

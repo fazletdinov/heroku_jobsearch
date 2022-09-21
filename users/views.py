@@ -87,18 +87,20 @@ class UserApi(generics.GenericAPIView):
     def get_object(self):
         return self.request.user
 
-class ProfileView(generics.GenericAPIView):
+class ProfileView(viewsets.ModelViewSet):
     #queryset = UserProfile.objects.using('default').all()
-    serializer_class = ProfileSerializer
+    serializer_class = UserSerializer
     #permission_classes = [IsAuthenticatedOrReadOnly]
 
     def post(self, request, *args, **kwargs):
-        user = get_object_or_404(MyUser, pk=request.user.pk)
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            user.profile = serializer.save()
-            return Response(ProfileSerializer(user.profile))
+            profile = serializer.save(user=request.user)
+            return Response(ProfileSerializer(profile))
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self, request):
+        user = self.request.user
+        return UserProfile.objects.filter(user=user)
 
 
 @api_view(['GET'])
