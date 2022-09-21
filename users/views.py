@@ -15,6 +15,9 @@ from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
+from rest_framework import mixins
+
+
 
 def dashboard(request):
     return HttpResponse("<h1>Hello World</h1>")
@@ -87,20 +90,23 @@ class UserApi(generics.GenericAPIView):
     def get_object(self):
         return self.request.user
 
-class ProfileView(viewsets.ModelViewSet):
+class ProfileView(mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  viewsets.GenericViewSet):
     #queryset = UserProfile.objects.using('default').all()
     serializer_class = UserSerializer
     #permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            profile = serializer.save(user=request.user)
-            return Response(ProfileSerializer(profile))
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#    def post(self, request, *args, **kwargs):
+#        serializer = self.serializer_class(data=request.data)
+#        if serializer.is_valid(raise_exception=True):
+#            profile = serializer.save(user=request.user)
+#            return Response(ProfileSerializer(profile))
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def get_queryset(self):
-        user = self.request.user
-        return UserProfile.objects.filter(user=user)
+        return self.request.user.profile
 
 
 @api_view(['GET'])
