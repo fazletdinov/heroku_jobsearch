@@ -98,7 +98,7 @@ class ProfileView(generics.ListCreateAPIView):
             profile = serializer.save(user=request.user)
             return Response(ProfileSerializer(profile))
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    def get_queryset(self, request):
+    def get_queryset(self, request, *args, **kwargs):
         user = self.request.user
         return UserProfile.objects.filter(user=user)
 
